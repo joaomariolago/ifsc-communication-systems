@@ -1,0 +1,19 @@
+def nrz_encoding(data: bytearray, symbol_time: float, samples_per_symbol: int, high_level: float  = 1.0, low_level: float = 0.0) -> Tuple[List[float], List[float]]:
+    """
+    Non-Return-to-Zero (NRZ) Encoding
+    :param data: Input data as a bytearray
+    :param symbol_time: Time duration for each symbol
+    :param samples_per_symbol: Number of samples per symbol
+    :param high_level: High level voltage for '1'
+    :param low_level: Low level voltage for '0'
+    :return: [List of encoded signal values, time values]
+    """
+    signal = []
+    for byte in data:
+        for bit in format(byte, '08b'):
+            if bit == '1':
+                signal.extend([high_level] * samples_per_symbol)
+            else:
+                signal.extend([low_level] * samples_per_symbol)
+    sample_time = symbol_time / samples_per_symbol
+    return signal, np.arange(0, len(signal) * sample_time, sample_time).tolist()
